@@ -47,6 +47,14 @@ def load_models() -> None:
                 "Ensure all .pkl files are in app/models/"
             )
 
+        if os.path.getsize(filepath) < 500:
+            with open(filepath, "rb") as f:
+                header = f.read(50)
+                if b"version https://git-lfs" in header:
+                    raise RuntimeError(
+                        f"Model file {filename} is a Git LFS pointer instead of the actual binary model."
+                    )
+
         ml_models[key] = joblib.load(filepath)
         logger.info("✓ Loaded %s successfully", key)
 
