@@ -2,6 +2,7 @@
 Application configuration loaded from .env file.
 """
 
+from typing import Optional
 from pydantic_settings import BaseSettings
 
 
@@ -12,6 +13,8 @@ class Settings(BaseSettings):
     JWT_EXPIRE_MINUTES: int = 60
     DB_URL: str = "sqlite:///./agrilux.db"
     CORS_ORIGIN: str = "http://localhost:3000"
+    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_MODEL: str = "gemini-3.5-flash"
 
     class Config:
         env_file = ".env"

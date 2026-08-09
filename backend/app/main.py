@@ -19,7 +19,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.db.database import Base, engine
-from app.routers import auth, crop, fertilizer, history, profile
+from app.routers import auth, crop, fertilizer, history, profile, chat
 from app.routers import yield_pred
 from app.utils.model_loader import load_models
 
@@ -87,6 +87,8 @@ app.include_router(fertilizer.router)
 app.include_router(yield_pred.router)
 app.include_router(history.router)
 app.include_router(profile.router)
+app.include_router(chat.router)
+
 
 
 # ---------- Health Check ----------

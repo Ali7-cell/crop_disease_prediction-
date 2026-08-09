@@ -172,6 +172,41 @@ test("Predict Fertilizer (Invalid Soil)", "POST", f"{BASE}/predict-fertilizer", 
     "nitrogen": 37.0, "potassium": 0.0, "phosphorous": 0.0,
 })
 
+# ──────────── 20. CHAT ASSISTANT (No Auth — should fail 403) ────────────
+test("Chat Assistant (No Auth)", "POST", f"{BASE}/chat", 403, json_body={
+    "message": "What is the best crop for sandy soil?"
+})
+
+# ──────────── 21. CHAT ASSISTANT (Auth) ────────────
+# Since GEMINI_API_KEY might not be configured in the test environment,
+# we allow either 200 (Success) or 503 (Service Unavailable / Config missing).
+print("\nTesting Chat Assistant...")
+try:
+    chat_res = requests.post(
+        f"{BASE}/chat",
+        headers=AUTH,
+        json={
+            "message": "What is the best crop for sandy soil?",
+            "history": [
+                {"role": "user", "content": "Hello"},
+                {"role": "model", "content": "Hello! I am Agrilux, your farming assistant. How can I help you today?"}
+            ]
+        },
+        timeout=30
+    )
+    status_ok = chat_res.status_code in [200, 503]
+    symbol = "✅" if status_ok else "❌"
+    print(f"{symbol} Chat Assistant (Auth)")
+    print(f"   Status: {chat_res.status_code} (expected 200 or 503)")
+    try:
+        print(f"   Response: {json.dumps(chat_res.json(), indent=2)[:500]}")
+    except Exception:
+        print(f"   Response: {chat_res.text[:300]}")
+    results.append({"name": "Chat Assistant (Auth)", "pass": status_ok, "status": chat_res.status_code})
+except Exception as e:
+    print(f"💥 Chat Assistant (Auth) — EXCEPTION: {e}")
+    results.append({"name": "Chat Assistant (Auth)", "pass": False, "status": str(e)})
+
 # ──────────── SUMMARY ────────────
 print("\n" + "=" * 70)
 print("  TEST RESULTS SUMMARY")
