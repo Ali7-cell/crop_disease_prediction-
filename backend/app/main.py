@@ -91,7 +91,19 @@ app.include_router(chat.router)
 
 
 
-# ---------- Health Check ----------
+# ---------- Root & Health Check ----------
+@app.get("/", tags=["Root"])
+def root():
+    """Root endpoint welcoming users and providing documentation links."""
+    return {
+        "message": "Welcome to Agrilux API — AI-Powered Smart Farming Assistant 🌾",
+        "docs": "/docs",
+        "health": "/health",
+        "status": "online",
+        "version": "1.0.0"
+    }
+
+
 @app.get("/health", tags=["Health"])
 def health_check():
     """Simple health check endpoint."""
