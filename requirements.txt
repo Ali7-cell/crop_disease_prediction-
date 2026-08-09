@@ -1,0 +1,2 @@
+# Agrilux Root Requirements
+-r backend/requirements.txt

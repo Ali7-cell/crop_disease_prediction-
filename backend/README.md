@@ -1,4 +1,17 @@
+---
+title: Agrilux - AI-Powered Smart Farming Assistant
+emoji: 🌾
+colorFrom: green
+colorTo: yellow
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # Agrilux API — AI-Powered Smart Farming Assistant
+
 
 Agrilux is a smart farming backend application designed to assist farmers and agricultural consultants. It leverages Machine Learning models to make predictions for crops, fertilizers, and crop yields based on soil composition, weather, and historical data.
 
