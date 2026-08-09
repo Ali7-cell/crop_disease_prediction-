@@ -2,7 +2,8 @@
 # CRITICAL: scikit-learn is pinned to 1.7.1 — models were trained on this version.
 # Do NOT upgrade without retraining models (risk of silent prediction drift).
 
-fastapi>=0.115.0
+fastapi[standard]>=0.115.0
+fastapi-cli>=0.0.5
 uvicorn[standard]>=0.30.0
 sqlalchemy>=2.0.0
 python-jose[cryptography]>=3.3.0
