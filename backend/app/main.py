@@ -60,13 +60,36 @@ app = FastAPI(
 
 
 # ---------- CORS ----------
+raw_cors = getattr(settings, "CORS_ORIGIN", "*")
+if isinstance(raw_cors, str):
+    cors_origins = [o.strip() for o in raw_cors.split(",") if o.strip()]
+else:
+    cors_origins = list(raw_cors)
+
+if "*" in cors_origins or not cors_origins:
+    allow_origins = ["*"]
+else:
+    default_origins = [
+        "https://agrilux.vercel.app",
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+    ]
+    for origin in default_origins:
+        if origin not in cors_origins:
+            cors_origins.append(origin)
+    allow_origins = cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.CORS_ORIGIN],
+    allow_origins=allow_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # ---------- Global Exception Handler ----------

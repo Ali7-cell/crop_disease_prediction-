@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "change-me-in-production"
     JWT_EXPIRE_MINUTES: int = 60
     DB_URL: str = "sqlite:///./agrilux.db"
-    CORS_ORIGIN: str = "http://localhost:3000"
+    CORS_ORIGIN: str = "*"
     GEMINI_API_KEY: Optional[str] = None
     GEMINI_MODEL: str = "gemini-3.5-flash"
 
