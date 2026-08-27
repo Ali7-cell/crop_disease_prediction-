@@ -4,9 +4,13 @@ API router for the AI assistant chat endpoint.
 
 import json
 import logging
+import warnings
 import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+import base64
 import google.generativeai as genai
 
 from app.config import settings
@@ -239,11 +243,34 @@ async def chat_with_assistant(
                     "parts": [msg.content]
                 })
 
+        # Prepare message parts (text + optional audio recording)
+        message_parts = []
+        if req.audio_b64:
+            try:
+                audio_bytes = base64.b64decode(req.audio_b64)
+                message_parts.append({
+                    "inline_data": {
+                        "mime_type": req.audio_mime or "audio/webm",
+                        "data": audio_bytes
+                    }
+                })
+            except Exception as audio_err:
+                logger.error(f"Error decoding base64 audio: {audio_err}")
+
+        if req.message:
+            message_parts.append(req.message)
+
+        if not message_parts:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Please provide text message or voice recording."
+            )
+
         # Start a multi-turn chat session with history
         chat_session = model.start_chat(history=gemini_history)
         
         # Send user message asynchronously
-        response = await chat_session.send_message_async(req.message)
+        response = await chat_session.send_message_async(message_parts)
         
         # Save successfully run predictions to database history
         if ml_type is not None:

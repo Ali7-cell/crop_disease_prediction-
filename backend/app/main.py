@@ -131,3 +131,10 @@ def root():
 def health_check():
     """Simple health check endpoint."""
     return {"status": "ok"}
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    """Return 204 No Content for favicon requests to prevent 404 logs."""
+    from fastapi import Response
+    return Response(status_code=204)

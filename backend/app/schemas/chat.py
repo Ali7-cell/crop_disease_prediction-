@@ -20,10 +20,17 @@ class ChatMessage(BaseModel):
 
 class ChatRequest(BaseModel):
     """POST /chat request body."""
-    message: str = Field(
-        ...,
-        min_length=1,
+    message: Optional[str] = Field(
+        default="",
         description="The query / message from the user to the AI assistant."
+    )
+    audio_b64: Optional[str] = Field(
+        default=None,
+        description="Base64 encoded voice recording from browser MediaRecorder."
+    )
+    audio_mime: Optional[str] = Field(
+        default="audio/webm",
+        description="MIME type of the base64 audio recording."
     )
     history: Optional[List[ChatMessage]] = Field(
         default=None,
