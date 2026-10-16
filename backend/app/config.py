@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """Agrilux application settings — all values come from .env"""
 
     JWT_SECRET: str = "change-me-in-production"
-    JWT_EXPIRE_MINUTES: int = 60
+    JWT_EXPIRE_MINUTES: int = 1440
     DB_URL: str = "sqlite:///./agrilux.db"
     CORS_ORIGIN: str = "*"
     GEMINI_API_KEY: Optional[str] = None
